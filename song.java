@@ -4,16 +4,22 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 
 public class song {
     public Media song;
     public beatmap map;
-
+    public MediaPlayer mp;
     public song(String filepath)
     {
         song = new Media(filepath + "/song.mp3");
         map = new beatmap((filepath + "/map.bm").substring(8));
+        mp = new MediaPlayer(song);
+    }
+    public void playSong()
+    {
+        mp.play();
     }
     public song()
     {
@@ -25,31 +31,35 @@ class beatmap {
     private BufferedReader reader;
     public LinkedList<note> notes;
     public beatmap(String path){
+        notes = new LinkedList<note>();
         try{
-            reader = new BufferedReader(new FileReader(path));
-            notes = new LinkedList<note>();
+            reader = new BufferedReader(new FileReader(path.replaceAll("/","\\\\").replaceAll("%20"," ")));
             while(!reader.readLine().equals("[HitObjects]")){}
             String line = reader.readLine();
             do
             {
+                System.out.println(line);
                 String[] ins = line.split(",");
                 note n;
-                if(ins.length==6)
+                if(ins[3].equals("1") || ins[3].equals("5"))
                     n = new note(Integer.parseInt(ins[0]),Integer.parseInt(ins[1]),Long.parseLong(ins[2]),Integer.parseInt(ins[3]),Integer.parseInt(ins[4]));
                 else
                 {
-                    if(ins.length==7)
+                    if(ins[3].equals("8")||ins[3].equals("12"))
                     {
                         n = new spinner(Integer.parseInt(ins[0]),Integer.parseInt(ins[1]),Long.parseLong(ins[2]),Integer.parseInt(ins[3]),Integer.parseInt(ins[4]),Long.parseLong(ins[5]));
                     }
                     else
                     {
                         char cType = ins[5].charAt(0);
-                        String[] splits = ins[5].split("|");
+                        String[] splits = ins[5].split("\\|");
+                        for(String s : splits)
+                            System.out.println(s);
                         int[][] cords = new int[splits.length-1][2];
                         for(int i = 0; i < cords.length; ++i)
                         {
                             String[] cds = splits[i+1].split(":");
+                            System.out.println(cds[0]);
                             cords[i][0] = Integer.parseInt(cds[0]);
                             cords[i][1] = Integer.parseInt(cds[1]);
                         }
@@ -58,8 +68,8 @@ class beatmap {
                 }
                 line = reader.readLine();
                 notes.add(n);
-            } while(line.equals("\n"));
-        } catch (IOException e){}
+            } while(reader.ready());
+        } catch (IOException e){System.out.println("asldhfgiawptogah");}
     }
 }
 
