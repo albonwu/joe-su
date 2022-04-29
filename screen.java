@@ -47,8 +47,8 @@ public class screen extends JPanel implements ActionListener, KeyListener, Mouse
         stage = 0;
         pstage = -1;
         SongMaps = new song[4];
-        SongMaps[0] = new song("file:///C:/Users/achau/Desktop/Code%20Projects/cs3%20game%20thing/songs/Bad%20Apple");
-        SongMaps[1] = new song("file:///C:/Users/achau/Desktop/Code%20Projects/cs3%20game%20thing/songs/snow%20halation");
+        SongMaps[0] = new song("folder for first song");
+        SongMaps[1] = new song("folder for second song");
         notelist = SongMaps[1].map.notes.listIterator();
 //        System.out.println(SongMaps[0].map.notes.size());
 //        for(note n : SongMaps[0].map.notes)
