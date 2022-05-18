@@ -32,13 +32,13 @@ public class Menu extends Application {
     public void start(Stage outStage) throws Exception {
 
         // get bounds of screen
-        Rectangle2D r = Screen.getPrimary().getBounds();
+        // Rectangle2D r = Screen.getPrimary().getBounds();
 
-        System.out.println(r.getWidth());
-        System.out.println(r.getHeight());
+        System.out.println(1440);
+        System.out.println(900);
 
         // add snow background
-        snowBack = new Image("https://i.imgur.com/6fyRfHb.jpeg", r.getWidth(), r.getHeight(), true, true);
+        snowBack = new Image("https://i.imgur.com/6fyRfHb.jpeg", 1440, 900, true, true);
         ImageInput sbInput = new ImageInput();
         snowiv = new ImageView();
 
@@ -57,54 +57,54 @@ public class Menu extends Application {
 
         // add gray backdrop
         Paint backdropColor = Paint.valueOf("white");
-        Rectangle backdrop = new Rectangle(888, 0, 1920, 3000);
+        Rectangle backdrop = new Rectangle(588, 0, 1920, 3000);
         backdrop.setFill(backdropColor);
         backdrop.setOpacity(0.5);
 
         // add select box
         Paint paint = Paint.valueOf("white");
-        Rectangle select = new Rectangle(900, 360, 1920, 160);
+        Rectangle select = new Rectangle(600, 360, 1920, 160);
         select.setFill(paint);
         select.setOpacity(0.5);
 
         // add bad menu option
-        Image badApple = new Image("https://i.imgur.com/V47CJZ5.png", r.getWidth(), r.getHeight(), true, true);
+        Image badApple = new Image("https://i.imgur.com/V47CJZ5.png", 1440, 900, true, true);
         ImageInput badAppleSource = new ImageInput();
 
         badAppleSource.setSource(badApple);
-        badAppleSource.setX(900);
+        badAppleSource.setX(600);
         badAppleSource.setY(680);
         bad = new Rectangle();
         bad.setEffect(badAppleSource);
 
         // add snow menu option
-        Image snowHalation = new Image("https://i.imgur.com/C1iJXix.png", r.getWidth(), r.getHeight(), true, true);
+        Image snowHalation = new Image("https://i.imgur.com/C1iJXix.png", 1440, 900, true, true);
         ImageInput snowHalationSource = new ImageInput();
 
         snowHalationSource.setSource(snowHalation);
-        snowHalationSource.setX(900);
+        snowHalationSource.setX(600);
         snowHalationSource.setY(520);
         snow = new Rectangle();
         snow.setEffect(snowHalationSource);
 
         // loop the two songs in the menu
         for (int i = 0; i < 10; i += 2) {
-            Image badTemp = new Image("https://i.imgur.com/V47CJZ5.png", r.getWidth(), r.getHeight(), true, true);
+            Image badTemp = new Image("https://i.imgur.com/V47CJZ5.png", 1440, 900, true, true);
             ImageInput badTempSource = new ImageInput();
             Rectangle badRectTemp = new Rectangle();
 
-            Image snowTemp = new Image("https://i.imgur.com/C1iJXix.png", r.getWidth(), r.getHeight(), true, true);
+            Image snowTemp = new Image("https://i.imgur.com/C1iJXix.png", 1440, 900, true, true);
             ImageInput snowTempSource = new ImageInput();
             Rectangle snowRectTemp = new Rectangle();
 
             badTempSource.setSource(badTemp);
-            badTempSource.setX(900);
+            badTempSource.setX(600);
             badTempSource.setY(1000 - i * 160);
             badRectTemp.setEffect(badTempSource);
             songs[i] = badRectTemp;
 
             snowTempSource.setSource(snowTemp);
-            snowTempSource.setX(900);
+            snowTempSource.setX(600);
             snowTempSource.setY(1000 - (i + 1) * 160);
             snowRectTemp.setEffect(snowTempSource);
             songs[i + 1] = snowRectTemp;
@@ -121,7 +121,7 @@ public class Menu extends Application {
             root.getChildren().add(songs[i]);
         }
         root.getChildren().add(select);
-        Scene scene = new Scene(root, 1920, 1080, Color.WHITE);
+        Scene scene = new Scene(root, 1440, 900, Color.WHITE);
 
         // detect keypresses
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
