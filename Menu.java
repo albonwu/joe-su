@@ -1,44 +1,73 @@
-import javafx.stage.*;
-import javafx.scene.*;
-
+import javafx.animation.AnimationTimer;
+import javafx.animation.TranslateTransition;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.effect.ImageInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.geometry.Rectangle2D;
-
-import javafx.animation.TranslateTransition;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+// import javafx.geometry.Rectangle2D;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.application.Application;
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
 
 public class Menu extends Application {
     Rectangle[] songs = new Rectangle[10];
 
     Stage s = new Stage();
     int stage = 0;
-    boolean moveUp, moveDown;
-    Rectangle bad;
-    Rectangle snow;
-    Image badBack;
-    Image snowBack;
-    ImageView badiv;
-    ImageView snowiv;
+    boolean moveUp, moveDown, selected;
+    Rectangle bad, snow;
+    Rectangle badleaderboardRect, snowleaderboardRect;
+    Image badBack, snowBack;
+    ImageView badiv, snowiv;
+
+    Rectangle temp;
+    Text badSelect, snowSelect;
 
     public void start(Stage outStage) throws Exception {
+
+        Image badleaderboard = new Image("https://i.imgur.com/jAfTBXO.png", 500, 500, true, true);
+        ImageInput badleaderboardInput = new ImageInput();
+        badleaderboardRect = new Rectangle();
+        badleaderboardInput.setSource(badleaderboard);
+        badleaderboardRect.setEffect(badleaderboardInput);
+        badleaderboardInput.setX(100);
+        badleaderboardInput.setY(200);
+        badleaderboardRect.setOpacity(1);
+
+        Image snowleaderboard = new Image("https://i.imgur.com/qhWcIoQ.png", 500, 500, true, true);
+        ImageInput snowleaderboardInput = new ImageInput();
+        snowleaderboardRect = new Rectangle();
+        snowleaderboardInput.setSource(snowleaderboard);
+        snowleaderboardRect.setEffect(snowleaderboardInput);
+        snowleaderboardInput.setX(100);
+        snowleaderboardInput.setY(200);
+        snowleaderboardRect.setOpacity(0);
 
         // get bounds of screen
         // Rectangle2D r = Screen.getPrimary().getBounds();
 
-        System.out.println(1440);
-        System.out.println(900);
+        // temporary game interface
+        temp = new Rectangle(1440, 900);
+        Paint tempColor = Paint.valueOf("white");
+        temp.setFill(tempColor);
+        temp.setOpacity(0);
+        badSelect = new Text(200, 500, "Bad Apple selected");
+        badSelect.setFont(new Font(100));
+        badSelect.setOpacity(0);
+        snowSelect = new Text(200, 500, "Snow halation selected");
+        snowSelect.setFont(new Font(100));
+        snowSelect.setOpacity(0);
 
         // add snow background
-        snowBack = new Image("https://i.imgur.com/6fyRfHb.jpeg", 1440, 900, true, true);
+        snowBack = new Image("https://i.imgur.com/6fyRfHb.jpeg", 1920, 1080, true, true);
         ImageInput sbInput = new ImageInput();
         snowiv = new ImageView();
 
@@ -114,13 +143,18 @@ public class Menu extends Application {
         Group root = new Group(snowiv);
 
         root.getChildren().add(badiv);
-
         root.getChildren().add(backdrop);
 
         for (int i = 0; i < 10; i++) {
             root.getChildren().add(songs[i]);
         }
         root.getChildren().add(select);
+        root.getChildren().add(temp);
+        root.getChildren().add(badSelect);
+        root.getChildren().add(snowSelect);
+        root.getChildren().add(badleaderboardRect);
+        root.getChildren().add(snowleaderboardRect);
+
         Scene scene = new Scene(root, 1440, 900, Color.WHITE);
 
         // detect keypresses
@@ -133,6 +167,9 @@ public class Menu extends Application {
                         break;
                     case DOWN:
                         moveDown = true;
+                        break;
+                    case ENTER:
+                        selected = true;
                         break;
                     default:
                 }
@@ -151,13 +188,33 @@ public class Menu extends Application {
                     scrollUp();
                     moveUp = false;
                 }
-                if (moveDown)
+                if (moveDown) {
                     scrollDown();
-                moveDown = false;
+                    moveDown = false;
+                }
+                if (selected) {
+                    select();
+                    selected = false;
+                }
 
             }
         };
         timer.start();
+
+    }
+
+    public void select() {
+        if (temp.getOpacity() != 0) {
+            temp.setOpacity(0);
+            badSelect.setOpacity(0);
+            snowSelect.setOpacity(0);
+        } else {
+            temp.setOpacity(0.7);
+            if (stage % 2 == 0)
+                badSelect.setOpacity(1);
+            else
+                snowSelect.setOpacity(1);
+        }
 
     }
 
@@ -166,8 +223,12 @@ public class Menu extends Application {
 
         if (Math.abs(stage) % 2 == 1) {
             badiv.setOpacity(0);
+            badleaderboardRect.setOpacity(0);
+            snowleaderboardRect.setOpacity(1);
         } else {
             badiv.setOpacity(1);
+            badleaderboardRect.setOpacity(1);
+            snowleaderboardRect.setOpacity(0);
         }
         for (int i = 0; i < 10; i++) {
             TranslateTransition translateTransition = new TranslateTransition();
@@ -194,8 +255,12 @@ public class Menu extends Application {
 
         if (Math.abs(stage) % 2 == 1) {
             badiv.setOpacity(0);
+            badleaderboardRect.setOpacity(0);
+            snowleaderboardRect.setOpacity(1);
         } else {
             badiv.setOpacity(1);
+            badleaderboardRect.setOpacity(1);
+            snowleaderboardRect.setOpacity(0);
         }
 
         for (int i = 0; i < 10; i++) {
@@ -216,6 +281,7 @@ public class Menu extends Application {
 
         }
     }
+
     public static void main(String[] args) {
         launch(args);
     }
